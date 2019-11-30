@@ -1,13 +1,7 @@
-import 'dart:async';
+library location_picker_fluttify;
 
-import 'package:flutter/services.dart';
+export 'package:amap_map_fluttify/amap_map_fluttify.dart';
+export 'package:amap_search_fluttify/amap_search_fluttify.dart';
 
-class LocationPickerFluttify {
-  static const MethodChannel _channel =
-      const MethodChannel('location_picker_fluttify');
-
-  static Future<String> get platformVersion async {
-    final String version = await _channel.invokeMethod('getPlatformVersion');
-    return version;
-  }
-}
+export 'src/screen/location_picker.screen.dart';
+export 'src/widget/candidate_poi.widget.dart';

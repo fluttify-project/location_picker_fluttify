@@ -12,6 +12,7 @@ dependencies:
     sdk: flutter
   amap_map_fluttify: ^0.8.4+edd4090
   amap_search_fluttify: ^0.3.3+97873c8
+  permission_handler: ^4.0.0
 
 dev_dependencies:
   flutter_test:
