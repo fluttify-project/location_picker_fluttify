@@ -1,5 +1,6 @@
 library location_picker_fluttify;
 
+import 'package:amap_search_fluttify/amap_search_fluttify.dart';
 import 'package:flutter/material.dart';
 
 import 'src/screen/location_picker.screen.dart';
@@ -10,7 +11,7 @@ export 'package:amap_search_fluttify/amap_search_fluttify.dart';
 export 'src/screen/location_picker.screen.dart';
 export 'src/widget/candidate_poi.widget.dart';
 
-Future<void> showLocationPicker(
+Future<Poi> showLocationPicker(
   BuildContext context, {
   @required PoiBuilder poiBuilder,
   Widget center,

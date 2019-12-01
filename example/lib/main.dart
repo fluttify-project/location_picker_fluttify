@@ -14,34 +14,48 @@ class MyApp extends StatelessWidget {
   }
 }
 
-class HomeScreen extends StatelessWidget {
+class HomeScreen extends StatefulWidget {
+  @override
+  _HomeScreenState createState() => _HomeScreenState();
+}
+
+class _HomeScreenState extends State<HomeScreen> {
+  String _title;
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Center(
-        child: RaisedButton(
-          onPressed: () {
-            showLocationPicker(
-              context,
-              poiBuilder: (context, poi) async => CandidatePoi(
-                title: Text(
-                  await poi.title,
-                  style: TextStyle(color: Colors.black, fontSize: 18),
-                ),
-                subtitle: Text(
-                  await poi.address,
-                  overflow: TextOverflow.ellipsis,
-                ),
-                trailing: Icon(
-                  Icons.check,
-                  color: Theme.of(context).primaryColor,
-                ),
-              ),
-            );
-          },
-          child: Text('地址选择器'),
-        ),
+      body: Column(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: <Widget>[
+          RaisedButton(
+            onPressed: () => _handleShowPicker(context),
+            child: Text('地址选择器'),
+          ),
+          if (_title != null) Text(_title, textAlign: TextAlign.center),
+        ],
       ),
     );
+  }
+
+  Future<void> _handleShowPicker(BuildContext context) async {
+    final poi = await showLocationPicker(
+      context,
+      poiBuilder: (context, poi) async {
+        return CandidatePoi(
+          onTap: () => Navigator.pop(context, poi),
+          title: Text(
+            await poi.title,
+            style: TextStyle(color: Colors.black, fontSize: 18),
+          ),
+          subtitle: Text(
+            await poi.address,
+            overflow: TextOverflow.ellipsis,
+          ),
+        );
+      },
+    );
+    poi.title.then((title) => setState(() => _title = title));
   }
 }

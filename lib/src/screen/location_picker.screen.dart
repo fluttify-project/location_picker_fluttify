@@ -2,11 +2,12 @@ import 'package:amap_map_fluttify/amap_map_fluttify.dart';
 import 'package:amap_search_fluttify/amap_search_fluttify.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:location_picker_fluttify/src/utils/objects.dart';
 import 'package:location_picker_fluttify/src/utils/permissions.dart';
 
 typedef Future<Widget> PoiBuilder(BuildContext context, Poi poi);
 
-const _iconSize = 36.0;
+const _iconSize = 50.0;
 
 class LocationPickerScreen extends StatefulWidget {
   const LocationPickerScreen({
@@ -49,18 +50,14 @@ class _LocationPickerScreenState extends State<LocationPickerScreen> {
                 Center(
                   child: Transform.translate(
                     offset: Offset(0, -_iconSize / 2),
-                    child: widget.center ??
-                        Image.asset(
-                          'images/wechat_locate.png',
-                          package: 'location_picker_fluttify',
-                        ),
+                    child: widget.center ?? gDefaultCenter,
                   ),
                 ),
                 Align(
                   alignment: widget.locateAlignment,
-                  child: IconButton(
-                    icon: widget.locate ?? Icon(Icons.my_location),
-                    onPressed: _handleLocate,
+                  child: GestureDetector(
+                    child: widget.locate ?? gDefaultShowMyLocation,
+                    onTap: _handleLocate,
                   ),
                 ),
               ],
