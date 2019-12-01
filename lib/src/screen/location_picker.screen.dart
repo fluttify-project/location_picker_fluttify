@@ -44,7 +44,7 @@ class _LocationPickerScreenState extends State<LocationPickerScreen> {
                 AmapView(
                   maskDelay: widget.maskDelay,
                   showZoomControl: false,
-                  onMapDrag: _handleDrag,
+                  onMapMoved: _handleSearchAround,
                   onMapCreated: _handleCreate,
                 ),
                 Center(
@@ -91,7 +91,18 @@ class _LocationPickerScreenState extends State<LocationPickerScreen> {
     );
   }
 
-  Future<void> _handleDrag(drag) async {
+  // todo android和ios对于地图中心点改变的回调不一致
+  Future<void> _handleCreate(controller) async {
+    _controller = controller;
+    if (await requestPermission()) {
+      await _controller.showMyLocation(true);
+      await _controller.setZoomLevel(15, animated: false);
+      await _controller.showLocateControl(false);
+      await _handleSearchAround(null);
+    }
+  }
+
+  Future<void> _handleSearchAround(_) async {
     final center = await _controller.getCenterCoordinate();
     final around = await AmapSearch.searchAround(center);
 
@@ -99,15 +110,6 @@ class _LocationPickerScreenState extends State<LocationPickerScreen> {
         .asyncMap((poi) => poi)
         .toList()
         .then((it) => setState(() => _poiList = it));
-  }
-
-  Future<void> _handleCreate(controller) async {
-    _controller = controller;
-    if (await requestPermission()) {
-      await _controller.showMyLocation(true);
-      await _controller.setZoomLevel(15, animated: false);
-      await _controller.showLocateControl(false);
-    }
   }
 
   Future<void> _handleLocate() async {
