@@ -4,6 +4,7 @@ import 'package:location_picker_fluttify/location_picker_fluttify.dart';
 
 Future<void> main() async {
   await enableFluttifyLog(false);
+  await AmapCore.init('0a536ec318043a4b61e7b2a8796fba41');
   runApp(MyApp());
 }
 
