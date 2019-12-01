@@ -19,6 +19,9 @@ dev_dependencies:
     sdk: flutter
 
 flutter:
+  uses-material-design: true
   plugin:
     androidPackage: me.yohom.location_picker_fluttify
     pluginClass: LocationPickerFluttifyPlugin
+  assets:
+    - images/

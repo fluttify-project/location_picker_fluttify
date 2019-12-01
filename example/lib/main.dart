@@ -2,7 +2,8 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:location_picker_fluttify/location_picker_fluttify.dart';
 
-void main() {
+Future<void> main() async {
+  await enableFluttifyLog(false);
   runApp(MyApp());
 }
 
@@ -20,24 +21,20 @@ class HomeScreen extends StatelessWidget {
       body: Center(
         child: RaisedButton(
           onPressed: () {
-            Navigator.push(
+            showLocationPicker(
               context,
-              MaterialPageRoute(
-                builder: (context) => LocationPickerScreen(
-                  poiBuilder: (context, poi) async => CandidatePoi(
-                    title: Text(
-                      await poi.title,
-                      style: TextStyle(color: Colors.black, fontSize: 18),
-                    ),
-                    subtitle: Text(
-                      await poi.address,
-                      overflow: TextOverflow.ellipsis,
-                    ),
-                    trailing: Icon(
-                      Icons.check,
-                      color: Theme.of(context).primaryColor,
-                    ),
-                  ),
+              poiBuilder: (context, poi) async => CandidatePoi(
+                title: Text(
+                  await poi.title,
+                  style: TextStyle(color: Colors.black, fontSize: 18),
+                ),
+                subtitle: Text(
+                  await poi.address,
+                  overflow: TextOverflow.ellipsis,
+                ),
+                trailing: Icon(
+                  Icons.check,
+                  color: Theme.of(context).primaryColor,
                 ),
               ),
             );

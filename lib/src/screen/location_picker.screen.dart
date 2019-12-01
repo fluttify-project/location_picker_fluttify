@@ -50,10 +50,9 @@ class _LocationPickerScreenState extends State<LocationPickerScreen> {
                   child: Transform.translate(
                     offset: Offset(0, -_iconSize / 2),
                     child: widget.center ??
-                        Icon(
-                          Icons.location_on,
-                          size: _iconSize,
-                          color: Theme.of(context).primaryColor,
+                        Image.asset(
+                          'images/wechat_locate.png',
+                          package: 'location_picker_fluttify',
                         ),
                   ),
                 ),
