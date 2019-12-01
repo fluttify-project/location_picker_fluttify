@@ -1,14 +1,3 @@
-# location_picker_fluttify
+# 位置选择器
 
-A Location Picker. Based on `amap_x_fluttify` plugins.
-
-## Getting Started
-
-This project is a starting point for a Flutter
-[plug-in package](https://flutter.dev/developing-packages/),
-a specialized package that includes platform-specific implementation code for
-Android and/or iOS.
-
-For help getting started with Flutter, view our 
-[online documentation](https://flutter.dev/docs), which offers tutorials, 
-samples, guidance on mobile development, and a full API reference.
+一个位置选择器, 基于高德[地图插件](https://github.com/fluttify-project/amap_map_fluttify)和[搜索插件](https://github.com/fluttify-project/amap_search_fluttify), 目标是和微信的位置选择器一模一样的同时, 提供尽可能高的可定制化.

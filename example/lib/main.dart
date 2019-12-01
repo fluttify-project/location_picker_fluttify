@@ -1,56 +1,62 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'dart:async';
-
-import 'package:flutter/services.dart';
 import 'package:location_picker_fluttify/location_picker_fluttify.dart';
 
-void main() => runApp(MyApp());
-
-class MyApp extends StatefulWidget {
-  @override
-  _MyAppState createState() => _MyAppState();
+Future<void> main() async {
+  await enableFluttifyLog(false);
+  await AmapCore.init('0a536ec318043a4b61e7b2a8796fba41');
+  runApp(MyApp());
 }
 
-class _MyAppState extends State<MyApp> {
-  String _platformVersion = 'Unknown';
-
+class MyApp extends StatelessWidget {
   @override
-  void initState() {
-    super.initState();
-    initPlatformState();
+  Widget build(BuildContext context) {
+    return MaterialApp(home: HomeScreen());
   }
+}
 
-  // Platform messages are asynchronous, so we initialize in an async method.
-  Future<void> initPlatformState() async {
-    String platformVersion;
-    // Platform messages may fail, so we use a try/catch PlatformException.
-    try {
-      platformVersion = await LocationPickerFluttify.platformVersion;
-    } on PlatformException {
-      platformVersion = 'Failed to get platform version.';
-    }
+class HomeScreen extends StatefulWidget {
+  @override
+  _HomeScreenState createState() => _HomeScreenState();
+}
 
-    // If the widget was removed from the tree while the asynchronous platform
-    // message was in flight, we want to discard the reply rather than calling
-    // setState to update our non-existent appearance.
-    if (!mounted) return;
-
-    setState(() {
-      _platformVersion = platformVersion;
-    });
-  }
+class _HomeScreenState extends State<HomeScreen> {
+  String _title;
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      home: Scaffold(
-        appBar: AppBar(
-          title: const Text('Plugin example app'),
-        ),
-        body: Center(
-          child: Text('Running on: $_platformVersion\n'),
-        ),
+    return Scaffold(
+      body: Column(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: <Widget>[
+          RaisedButton(
+            onPressed: () => _handleShowPicker(context),
+            child: Text('地址选择器'),
+          ),
+          if (_title != null) Text(_title, textAlign: TextAlign.center),
+        ],
       ),
     );
+  }
+
+  Future<void> _handleShowPicker(BuildContext context) async {
+    final poi = await showLocationPicker(
+      context,
+      poiBuilder: (context, poi) async {
+        return CandidatePoi(
+          onTap: () => Navigator.pop(context, poi),
+          title: Text(
+            await poi.title,
+            style: TextStyle(color: Colors.black, fontSize: 18),
+          ),
+          subtitle: Text(
+            await poi.address,
+            overflow: TextOverflow.ellipsis,
+          ),
+        );
+      },
+    );
+    poi.title.then((title) => setState(() => _title = title));
   }
 }

@@ -10,6 +10,11 @@
         android:name="io.flutter.app.FlutterApplication"
         android:label="location_picker_fluttify_example"
         android:icon="@mipmap/ic_launcher">
+
+        <meta-data
+                android:name="com.amap.api.v2.apikey"
+                android:value="480e223ac620e602ccad1ac35192f6e4"/>
+
         <activity
             android:name=".MainActivity"
             android:launchMode="singleTop"

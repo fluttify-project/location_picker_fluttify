@@ -1,13 +1,34 @@
-import 'dart:async';
+library location_picker_fluttify;
 
-import 'package:flutter/services.dart';
+import 'package:amap_search_fluttify/amap_search_fluttify.dart';
+import 'package:flutter/material.dart';
 
-class LocationPickerFluttify {
-  static const MethodChannel _channel =
-      const MethodChannel('location_picker_fluttify');
+import 'src/screen/location_picker.screen.dart';
 
-  static Future<String> get platformVersion async {
-    final String version = await _channel.invokeMethod('getPlatformVersion');
-    return version;
-  }
+export 'package:amap_map_fluttify/amap_map_fluttify.dart';
+export 'package:amap_search_fluttify/amap_search_fluttify.dart';
+
+export 'src/screen/location_picker.screen.dart';
+export 'src/widget/candidate_poi.widget.dart';
+
+Future<Poi> showLocationPicker(
+  BuildContext context, {
+  @required PoiBuilder poiBuilder,
+  Widget center,
+  Widget locate,
+  AlignmentGeometry locateAlignment = AlignmentDirectional.bottomEnd,
+  Duration maskDelay = const Duration(milliseconds: 800),
+}) {
+  return Navigator.push(
+    context,
+    MaterialPageRoute(
+      builder: (context) => LocationPickerScreen(
+        poiBuilder: poiBuilder,
+        center: center,
+        locate: locate,
+        locateAlignment: locateAlignment,
+        maskDelay: maskDelay,
+      ),
+    ),
+  );
 }
