@@ -32,7 +32,7 @@ class LocationPickerScreen extends StatefulWidget {
 class _LocationPickerScreenState extends State<LocationPickerScreen>
     with SingleTickerProviderStateMixin {
   AmapController _controller;
-  List<Poi> _poiList = [];
+  Future<List<Poi>> _poiList = Future.value([]);
 
   AnimationController _jumpController;
   Animation<Offset> _tween;
@@ -41,8 +41,8 @@ class _LocationPickerScreenState extends State<LocationPickerScreen>
   void initState() {
     super.initState();
     _jumpController =
-        AnimationController(vsync: this, duration: Duration(milliseconds: 400));
-    _tween = Tween(begin: Offset(0, 0), end: Offset(0, -32)).animate(
+        AnimationController(vsync: this, duration: Duration(milliseconds: 300));
+    _tween = Tween(begin: Offset(0, 0), end: Offset(0, -15)).animate(
         CurvedAnimation(parent: _jumpController, curve: Curves.easeInOut));
   }
 
@@ -58,7 +58,8 @@ class _LocationPickerScreenState extends State<LocationPickerScreen>
                 AmapView(
                   maskDelay: widget.maskDelay,
                   showZoomControl: false,
-                  onMapMoveEnd: _handleSearchAround,
+                  onMapMoveStart: _handleMapMoveStart,
+                  onMapMoveEnd: _handleMapMoveEnd,
                   onMapCreated: _handleCreate,
                 ),
                 Center(
@@ -87,26 +88,9 @@ class _LocationPickerScreenState extends State<LocationPickerScreen>
             ),
           ),
           Flexible(
-            child: ListView.separated(
-              padding: EdgeInsets.zero,
-              shrinkWrap: true,
-              itemCount: _poiList.length,
-              itemBuilder: (context, index) {
-                return FutureBuilder<Widget>(
-                  future: widget.poiBuilder(context, _poiList[index]),
-                  builder: (context, snapshot) {
-                    if (snapshot.hasData) {
-                      return snapshot.data;
-                    } else {
-                      return Center(child: CupertinoActivityIndicator());
-                    }
-                  },
-                );
-              },
-              separatorBuilder: (context, index) => Divider(
-                height: 0,
-                indent: 8,
-              ),
+            child: _Candidates(
+              poiList: _poiList,
+              poiBuilder: widget.poiBuilder,
             ),
           ),
         ],
@@ -120,24 +104,67 @@ class _LocationPickerScreenState extends State<LocationPickerScreen>
       await _controller.showMyLocation(true);
       await _controller.setZoomLevel(15, animated: false);
       await _controller.showLocateControl(false);
-      await _handleSearchAround(null);
+      await _handleMapMoveEnd(null);
     }
   }
 
-  Future<void> _handleSearchAround(_) async {
+  Future<void> _handleMapMoveStart(MapMove move) async {}
+
+  Future<void> _handleMapMoveEnd(_) async {
     // 执行跳动动画
     _jumpController.forward().then((it) => _jumpController.reverse());
 
     final center = await _controller.getCenterCoordinate();
     final around = await AmapSearch.searchAround(center);
 
-    Stream.fromIterable(around)
-        .asyncMap((poi) => poi)
-        .toList()
-        .then((it) => setState(() => _poiList = it));
+    setState(() {
+      _poiList = Stream.fromIterable(around).asyncMap((poi) => poi).toList();
+    });
   }
 
   Future<void> _handleLocate() async {
     _controller.showMyLocation(true);
+  }
+}
+
+class _Candidates extends StatelessWidget {
+  const _Candidates({
+    Key key,
+    @required this.poiList,
+    @required this.poiBuilder,
+  }) : super(key: key);
+
+  final Future<List<Poi>> poiList;
+  final PoiBuilder poiBuilder;
+
+  @override
+  Widget build(BuildContext context) {
+    return FutureBuilder<List<Poi>>(
+      future: poiList,
+      builder: (context, snapshot) {
+        if (snapshot.hasData) {
+          return ListView.separated(
+            padding: EdgeInsets.zero,
+            shrinkWrap: true,
+            itemCount: snapshot.data.length,
+            itemBuilder: (context, index) {
+              return FutureBuilder<Widget>(
+                future: poiBuilder(context, snapshot.data[index]),
+                builder: (context, snapshot) {
+                  if (snapshot.hasData) {
+                    return snapshot.data;
+                  } else {
+                    return Center(child: CupertinoActivityIndicator());
+                  }
+                },
+              );
+            },
+            separatorBuilder: (_, __) => Divider(height: 0, indent: 8),
+          );
+        } else {
+          return Center(child: CupertinoActivityIndicator());
+        }
+      },
+    );
   }
 }

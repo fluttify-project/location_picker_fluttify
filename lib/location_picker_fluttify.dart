@@ -2,14 +2,13 @@ library location_picker_fluttify;
 
 import 'package:amap_search_fluttify/amap_search_fluttify.dart';
 import 'package:flutter/material.dart';
+import 'package:location_picker_fluttify/src/bloc/location_picker.bloc.dart';
+import 'package:location_picker_fluttify/src/ui/route/decorated_route.route.dart';
 
-import 'src/screen/location_picker.screen.dart';
+import 'src/ui/screen/location_picker.screen.dart';
 
 export 'package:amap_map_fluttify/amap_map_fluttify.dart';
 export 'package:amap_search_fluttify/amap_search_fluttify.dart';
-
-export 'src/screen/location_picker.screen.dart';
-export 'src/widget/candidate_poi.widget.dart';
 
 Future<Poi> showLocationPicker(
   BuildContext context, {
@@ -21,8 +20,9 @@ Future<Poi> showLocationPicker(
 }) {
   return Navigator.push(
     context,
-    MaterialPageRoute(
-      builder: (context) => LocationPickerScreen(
+    DecoratedRoute<LocationPickerBLoC, Poi>(
+      bloc: LocationPickerBLoC(),
+      screen: LocationPickerScreen(
         poiBuilder: poiBuilder,
         center: center,
         locate: locate,
