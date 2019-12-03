@@ -29,9 +29,22 @@ class LocationPickerScreen extends StatefulWidget {
   _LocationPickerScreenState createState() => _LocationPickerScreenState();
 }
 
-class _LocationPickerScreenState extends State<LocationPickerScreen> {
+class _LocationPickerScreenState extends State<LocationPickerScreen>
+    with SingleTickerProviderStateMixin {
   AmapController _controller;
   List<Poi> _poiList = [];
+
+  AnimationController _jumpController;
+  Animation<Offset> _tween;
+
+  @override
+  void initState() {
+    super.initState();
+    _jumpController =
+        AnimationController(vsync: this, duration: Duration(milliseconds: 400));
+    _tween = Tween(begin: Offset(0, 0), end: Offset(0, -32)).animate(
+        CurvedAnimation(parent: _jumpController, curve: Curves.easeInOut));
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -39,17 +52,27 @@ class _LocationPickerScreenState extends State<LocationPickerScreen> {
       body: Column(
         children: <Widget>[
           Flexible(
+            flex: 1,
             child: Stack(
               children: <Widget>[
                 AmapView(
                   maskDelay: widget.maskDelay,
                   showZoomControl: false,
-                  onMapMoved: _handleSearchAround,
+                  onMapMoveEnd: _handleSearchAround,
                   onMapCreated: _handleCreate,
                 ),
                 Center(
-                  child: Transform.translate(
-                    offset: Offset(0, -_iconSize / 2),
+                  child: AnimatedBuilder(
+                    animation: _tween,
+                    builder: (context, child) {
+                      return Transform.translate(
+                        offset: Offset(
+                          _tween.value.dx,
+                          _tween.value.dy - _iconSize / 2,
+                        ),
+                        child: child,
+                      );
+                    },
                     child: widget.center ?? gDefaultCenter,
                   ),
                 ),
@@ -91,7 +114,6 @@ class _LocationPickerScreenState extends State<LocationPickerScreen> {
     );
   }
 
-  // todo android和ios对于地图中心点改变的回调不一致
   Future<void> _handleCreate(controller) async {
     _controller = controller;
     if (await requestPermission()) {
@@ -103,6 +125,9 @@ class _LocationPickerScreenState extends State<LocationPickerScreen> {
   }
 
   Future<void> _handleSearchAround(_) async {
+    // 执行跳动动画
+    _jumpController.forward().then((it) => _jumpController.reverse());
+
     final center = await _controller.getCenterCoordinate();
     final around = await AmapSearch.searchAround(center);
 
