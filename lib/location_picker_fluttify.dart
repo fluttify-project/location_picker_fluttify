@@ -10,6 +10,8 @@ import 'src/ui/screen/location_picker.screen.dart';
 export 'package:amap_map_fluttify/amap_map_fluttify.dart';
 export 'package:amap_search_fluttify/amap_search_fluttify.dart';
 
+export 'src/ui/widget/candidate_poi.widget.dart';
+
 Future<Poi> showLocationPicker(
   BuildContext context, {
   @required PoiBuilder poiBuilder,
@@ -24,8 +26,8 @@ Future<Poi> showLocationPicker(
       bloc: LocationPickerBLoC(),
       screen: LocationPickerScreen(
         poiBuilder: poiBuilder,
-        center: center,
-        locate: locate,
+        pointer: center,
+        locator: locate,
         locateAlignment: locateAlignment,
         maskDelay: maskDelay,
       ),

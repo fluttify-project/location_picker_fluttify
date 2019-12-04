@@ -14,6 +14,7 @@ dependencies:
   amap_search_fluttify: ^0.3.4+97873c8
   permission_handler: ^4.0.0
   rxdart: ^0.22.6
+  after_layout: ^1.0.7+2
 
 dev_dependencies:
   flutter_test:
