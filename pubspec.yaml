@@ -1,6 +1,6 @@
 name: location_picker_fluttify
 description: A Location Picker. Based on `amap_x_fluttify` Plugins.
-version: 0.0.1
+version: 0.0.2
 author: yohom <382146139@qq.com>
 homepage: https://github.com/fluttify-project/location_picker_fluttify
 
