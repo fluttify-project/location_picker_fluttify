@@ -49,10 +49,10 @@ mixin _Private<T extends StatefulWidget> on AfterLayoutMixin<T> {
   Future<void> _handleMapMoveEnd(_) async {
     final bloc = BLoCProvider.of<LocationPickerBLoC>(context);
 
+    bloc.moveEnd.add(Object());
+
     final center = await _controller.getCenterCoordinate();
     final around = await AmapSearch.searchAround(center);
-
-    bloc.moveEnd.add(Object());
 
     Stream.fromIterable(around)
         .asyncMap((poi) => poi)

@@ -1,6 +1,5 @@
 import 'package:flutter/widgets.dart';
 import 'package:location_picker_fluttify/src/utils/bloc/bloc_io.dart';
-import 'package:meta/meta.dart';
 
 @immutable
 abstract class BLoC {

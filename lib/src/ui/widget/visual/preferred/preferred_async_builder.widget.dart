@@ -5,7 +5,6 @@ import 'package:location_picker_fluttify/src/ui/widget/visual/placeholder/empty_
 import 'package:location_picker_fluttify/src/ui/widget/visual/placeholder/loading.widget.dart';
 import 'package:location_picker_fluttify/src/utils/empty_util.dart';
 import 'package:location_picker_fluttify/src/utils/log.dart';
-import 'package:meta/meta.dart';
 
 import '../placeholder/error_placeholder.widget.dart';
 
