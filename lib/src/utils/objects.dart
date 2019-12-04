@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-final gDefaultCenter = Image.asset(
+final gDefaultPointer = Image.asset(
   'images/wechat_locate.png',
   package: 'location_picker_fluttify',
 );
