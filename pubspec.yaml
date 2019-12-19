@@ -5,15 +5,15 @@ author: yohom <382146139@qq.com>
 homepage: https://github.com/fluttify-project/location_picker_fluttify
 
 environment:
-  sdk: ">=2.2.2 <3.0.0"
+  sdk: ">=2.6.0 <3.0.0"
 
 dependencies:
   flutter:
     sdk: flutter
-  amap_map_fluttify: ^0.10.1+e42cd2f
-  amap_search_fluttify: ^0.3.4+97873c8
+  amap_map_fluttify: ^0.14.2+e26c0fa
+  amap_search_fluttify: ^0.5.0+acdcd89
   permission_handler: ^4.0.0
-  rxdart: ^0.22.6
+  rxdart: ^0.23.1
   after_layout: ^1.0.7+2
 
 dev_dependencies:
